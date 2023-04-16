@@ -1,0 +1,10 @@
+{
+   "compilerOptions": {
+      "baseUrl": "./",
+      "paths": {
+         "#MODELS/*": ["./sqlz/models/*"],
+         "#SQLZ" : ["./sqlz/sqlz.js"],
+         "#VALIDADORES" : ["./src/validadores.js"]
+      }
+   }
+}

@@ -25,3 +25,4 @@
 **/*.sw?
 
 **/.env
+**/package-lock.json

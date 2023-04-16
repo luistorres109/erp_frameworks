@@ -1,0 +1,42 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "SET NODE_ENV=development&&node app.js",
+    "dev": "SET NODE_ENV=development&&nodemon app.js",
+    "migrate": "npx sequelize-cli db:migrate",
+    "migratedev": "SET NODE_ENV=development&&npx sequelize-cli db:migrate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.3.5",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
+    "pg": "^8.10.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.31.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "sequelize-cli": "^6.6.0"
+  },
+  "imports": {
+    "#MODELS/*": "./sqlz/models/*",
+    "#SQLZ": "./sqlz/sqlz.js",
+    "#VALIDADORES": "./src/validadores.js"
+  },
+  "nodemonConfig": {
+    "ext": "js,cjs,mjs,json"
+  }
+}
