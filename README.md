@@ -1,10 +1,20 @@
 # Trabalho de Frameworks
 
 ## ***Ferramentas:***
-* Vue
-* Node.JS
-* Express
-* Vite
+* Front: Vite, Vue, Bootstrap
+* Backend: Node.JS, Express, Sequelize, Postgres
+
+## ***Executando***
+* Front: 
+  * cd ./front
+  * yarn
+  * yarn dev
+  
+* Backend:
+  * cd ./backend
+  * copiar .env.example para .env e preencher as variaveis de dev para conexão com banco
+  * npm i
+  * npm run dev
 
 ## ***Rotas Front:***
 * /login - Pagina de login Erp
@@ -31,6 +41,10 @@
 * /client{uuid} [GET,PUT] - Busca informarções do cliente e altera cadastro
 * /orders [GET,POST] - Busca todas as vendas e cadastra nova venda
 * /orders/{id} [GET,PUT] - Busca informarções da venda e altera venda se não tiver finalizada
+* /office [GET,POST] - Busca e cadastra cargos
+* /office/{id} [GET,PUT] - Busca e alterar um cargo
+* /permission [GET,POST] - Busca e cadastra permissões
+* /permission/{id} [GET,PUT] - Busca e altera uma permissão
 
 ## ***Tabelas:***
-
+![Modelagem](Modelage.png)
