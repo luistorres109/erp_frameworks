@@ -10,7 +10,9 @@ import sqlz from "#SQLZ";
 dotenv.config();
 
 
+
 (async () => {
+
    console.log(new Date().toString() + "\n")
    console.log("Ambiente: " + process.env.NODE_ENV + "\n")
 

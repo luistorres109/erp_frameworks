@@ -3,6 +3,7 @@
       "baseUrl": "./",
       "paths": {
          "#MODELS/*": ["./sqlz/models/*"],
+         "#CONTROLLER/*": ["./src/controller/*"],
          "#SQLZ" : ["./sqlz/sqlz.js"],
          "#VALIDADORES" : ["./src/validadores.js"]
       }
