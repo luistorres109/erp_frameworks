@@ -1,51 +1,71 @@
-import DBuser from "#MODELS/DBuser.js";
+import { DBUser } from "#MODELS/DBUser.js";
 import { ExisteError, NotExisteError } from "#VALIDADORES";
 import { v4 } from 'uuid';
 
 import bcrypt from "bcrypt";
-import DBoffice from "#MODELS/DBoffice.js";
+import { DBOffice } from "#MODELS/DBOffice.js";
+import { request, response } from "express";
 
-const query = async (req, res) => {
 
-   let users = await DBuser.findAll({ attributes: ['user_uuid', 'user_name'] });
+async function query(req = request, res = response) {
+
+   let users = await DBUser.findAll({
+      attributes: ['uuid', 'name'], where: {
+         isinactive: false
+      }
+   });
 
    return res.send(users);
 }
 
-const register = async (req, res) => {
+async function register(req = request, res = response) {
    try {
-      let { user_name, user_id_office, user_login, user_password } = req.body;
+      let { name, office_id, login, password } = req.body;
 
-      NotExisteError(user_name, "Nome não informado");
+      NotExisteError(name, "Nome não informado");
 
-      NotExisteError(user_id_office, "Cargo não informado");
+      NotExisteError(office_id, "Cargo não informado");
 
-      NotExisteError(user_login, "Login para acesso não informado");
+      NotExisteError(login, "Login para acesso não informado");
 
-      NotExisteError(user_password, "Senha para acesso não informado");
+      NotExisteError(password, "Senha para acesso não informado");
 
-      const offc = await DBoffice.findByPk(user_id_office);
+      const offc = await DBOffice.findByPk(office_id);
 
       NotExisteError(offc, "Cargo não encontrado");
 
-      const extuser = await DBuser.findOne({
+      const extuser = await DBUser.findOne({
+         attributes: ['login'],
          where: {
-            user_login
+            login
          }
       });
 
       ExisteError(extuser, "Usuario ja cadastrado")
 
-      user_password = await bcrypt.hash(user_password, 10);
+      password = await bcrypt.hash(password, 10);
 
-      const user_uuid = v4();
-      await DBuser.create({ user_uuid, user_name, user_id_office, user_login, user_password });
+      const uuid = v4();
+      await DBUser.create({ uuid, name, office_id, login, password });
 
-      return res.status(201).send({ user_uuid });
+      return res.status(201).send({ uuid });
    } catch (err) {
       console.error(err)
       return res.status(400).send({ msg: err });
    }
 }
 
-export default { query, register };
+async function edit(req = request, res = response) {
+   let { id } = req.params;
+   let { permission } = req.body;
+   try {
+
+
+
+   } catch (e) {
+      return res.status(400).send({ error: e });
+   }
+
+}
+
+export default { query, register }

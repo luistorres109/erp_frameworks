@@ -3,6 +3,7 @@
 ## ***Ferramentas:***
 * Front: Vite, Vue, Bootstrap
 * Backend: Node.JS, Express, Sequelize, Postgres
+* API CEP: https://viacep.com.br/ws/[CEP]/json/
 
 ## ***Executando***
 * Front: 
@@ -47,4 +48,4 @@
 * /permission/{id} [GET,PUT] - Busca e altera uma permissão
 
 ## ***Tabelas:***
-![Modelagem](Modelage.png)
+![Modelagem](Modelagem.png)

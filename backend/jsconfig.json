@@ -2,9 +2,10 @@
    "compilerOptions": {
       "baseUrl": "./",
       "paths": {
-         "#MODELS/*": ["./sqlz/models/*"],
+         "#SEQUELIZE": ["./src/config/database.js"],
+         "#MODELS/*": ["./src/models/*"],
          "#CONTROLLER/*": ["./src/controller/*"],
-         "#SQLZ" : ["./sqlz/sqlz.js"],
+         "#MIDDLEWARE/*": ["./src/middleware/*"],
          "#VALIDADORES" : ["./src/validadores.js"]
       }
    }
