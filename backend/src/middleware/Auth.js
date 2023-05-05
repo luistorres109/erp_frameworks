@@ -1,6 +1,8 @@
 import { ExisteError, NotExisteError } from "#VALIDADORES";
+import { request, response } from "express";
+import { verify } from "jsonwebtoken";
 
-export default async (req, res, next) => {
+export default async (req = request, res = response, next) => {
    try {
 
       let { authorization } = req.headers;
@@ -9,7 +11,7 @@ export default async (req, res, next) => {
 
       authorization = authorization.replace("Bearer ", "");
 
-      jwt.verify(authorization, process.env.JWT_SECRET_KEY, (err, decoded) => {
+      verify(authorization, process.env.JWT_SECRET_KEY, (err, decoded) => {
          ExisteError(err, "Token invalido!");
          req.userId = decoded.userUUID;
          req.userName = decoded.userName;
@@ -17,6 +19,7 @@ export default async (req, res, next) => {
 
       next();
    } catch (err) {
+      console.error(err)
       return res.status(401).send({ msg: err });
    }
 }

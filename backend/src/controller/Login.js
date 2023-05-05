@@ -1,7 +1,7 @@
 import { ValidadarSeExiste } from "#VALIDADORES";
 import Jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import DBuser from "#MODELS/DBuser.js";
+import { DBUser } from "#MODELS/DBUser.js";
 
 export default async (req, res) => {
    try {
@@ -9,9 +9,9 @@ export default async (req, res) => {
 
       const [usuario, senha] = Buffer.from(b64auth, 'base64').toString().split(':');
 
-      const user = await DBuser.findOne({
+      const user = await DBUser.findOne({
          where: {
-            user_login: usuario,
+            login: usuario,
          }
       });
 
@@ -19,10 +19,10 @@ export default async (req, res) => {
          throw "Usuario ou senha invalido";
       }
 
-      const match = await bcrypt.compare(senha, user.user_password);
+      const match = await bcrypt.compare(senha, user.password);
 
       if (match) {
-         const token = Jwt.sign({ userUUID: user.user_uuid, userName: user.user_name },
+         const token = Jwt.sign({ userUUID: user.uuid, userName: user.name },
             process.env.JWT_SECRET_KEY, { expiresIn: "8h", algorithm: 'HS256' });
 
          return res.send({ token });
