@@ -9,9 +9,6 @@ class DBOptionLocation extends Model {
             primaryKey: true,
             type: DataTypes.INTEGER
          },
-         option_id: {
-            type: DataTypes.INTEGER
-         },
          name: {
             type: DataTypes.STRING
          },
@@ -23,13 +20,7 @@ class DBOptionLocation extends Model {
       }, { sequelize, modelName: 'optionLocation' })
    }
 
-   static associate(models) {
-      this.belongsTo(models.option, {
-         foreignKey: {
-            name: "option_id"
-         }
-      })
-   }
+   static associate(models) { }
 
 }
 

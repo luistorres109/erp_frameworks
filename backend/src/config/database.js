@@ -31,9 +31,6 @@ function createConnection() {
             acquire: 30000,
             idle: 10000
          },
-         query: {
-            raw: true
-         },
          define: {
             timestamps: true, // Criar coluna para data de criação e alteracao 
             underscored: true, // trabalha com padrao de associção client_id em vez de clientId 

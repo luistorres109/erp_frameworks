@@ -35,6 +35,7 @@ class DBProduct extends Model {
 
   static associate(models) {
     this.belongsTo(models.option, {
+      as: "unmedida",
       foreignKey: {
         name: 'medida'
       }

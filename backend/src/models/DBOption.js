@@ -1,4 +1,5 @@
 import { DataTypes, Model } from "sequelize"
+import { DBOptionLocation } from "./DBOptionLocation.js";
 
 class DBOption extends Model {
    static init(sequelize) {
@@ -12,6 +13,10 @@ class DBOption extends Model {
          value: {
             type: DataTypes.STRING
          },
+         location_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+         },
          isinactive: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -20,7 +25,16 @@ class DBOption extends Model {
       }, { sequelize, modelName: 'option' })
    }
 
-   static associate(models) {}
+   static associate(models) {
+      models.optionLocation.hasMany(this, {
+         as: 'location', foreignKey: { name: "location_id" }
+      });
+      this.belongsTo(models.optionLocation,
+         {
+            as: 'location',
+            foreignKey: { name: "location_id" }
+         });
+   }
 
 }
 

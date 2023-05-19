@@ -25,6 +25,7 @@ function init(sequelize) {
    DBOrderItem.init(sequelize);
    DBOfficePermissions.init(sequelize);
    DBOptionLocation.init(sequelize);
+   console.log(DBOptionLocation.name)
    DBCep.init(sequelize);
 
    // Cria as ASSOCIAÇÕES das tabelas, OBS: A ordem da associação é muito importante!
@@ -50,6 +51,36 @@ async function insertDev() {
    if (await DBOffice.count() == 0) {
       await DBOffice.create({ name: "Admin" });
    }
+   if (await DBUser.count() == 0) {
+      // senha: admin
+      await DBUser.create({
+         name: "Admin",
+         office_id: 1,
+         login: "admin",
+         password: "$2b$10$cQ.bOKkBI5GfVkgwLffc.u4LBSeo6Cct.ytPjSGFPZ8ODdNnhzcxu"
+      });
+   }
+   const option_p = (await DBOptionLocation.findOrCreate({ where: { name: "product" } }))[0];
+   await DBOption.findOrCreate({
+      where: { value: "Unidade", location_id: option_p.id, },
+   });
+   await DBOption.findOrCreate({
+      where: { value: "Kilo", location_id: option_p.id },
+   });
+   await DBOption.findOrCreate({
+      where: { value: "Grama", location_id: option_p.id },
+   });
+
+   // await DBOptionLocation.findOrCreate({
+   //    where: { id: 2 },
+   //    defaults: { name: "Medidas do produto" }
+   // })
+   // await DBOption.findOrCreate({
+   //    where: { id: 1, },
+   //    defaults: { value: "Unidade", location_id: 2 }
+   // });
+
+
 }
 
 export default { init, insertDev };
