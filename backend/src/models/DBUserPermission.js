@@ -38,12 +38,21 @@ class DBUserPermission extends Model {
   }
 
   static associate(models) {
+    models.user.hasMany(this, {
+      foreignKey: {
+        name: 'user_uuid'
+      }
+    })
     this.belongsTo(models.user, {
       foreignKey: {
         name: 'user_uuid'
       }
     });
-
+    models.permission.hasMany(this, {
+      foreignKey: {
+        name: 'permission_id'
+      }
+    });
     this.belongsTo(models.permission, {
       foreignKey: {
         name: 'permission_id'
@@ -55,4 +64,3 @@ class DBUserPermission extends Model {
 }
 
 export { DBUserPermission };
-

@@ -1,12 +1,10 @@
-
-export function ValidadarSeExiste(value) {
-    if (!value) return false
-    if (Array.isArray(value) && value.length === 0) return false
-    if (typeof value === 'string' && !value.trim()) return false
-    if (typeof value === 'object' && Object.values(value).length == 0) {
+export function Exist(value) {
+    try {
+        NotExisteError(value, "");
+        return true;
+    } catch (e) {
         return false;
     }
-    return true;
 }
 
 export function NotExisteError(value, msg) {

@@ -1,14 +1,20 @@
+import Logger, { LoggerError, LoggerInfo } from "#MIDDLEWARE/Logger.js";
 import { DBClient } from "#MODELS/DBClient.js";
-import { NotExisteError, ValidarCPF } from "#VALIDADORES";
+import { Exist, ExisteError, NotExisteError, ValidarCPF } from "#VALIDADORES";
 import { request, response } from "express";
 
 
 async function query(req = request, res = response) {
-
-    const client = await DBClient.findAll({
-        where: { isinactive: false }
-    });
-    return res.status(200).json(client);
+    try {
+        LoggerInfo(req.logger_id, "Buscando todos clientes");
+        const client = await DBClient.findAll({
+            where: { isinactive: false }
+        });
+        return res.send(client);
+    } catch (er) {
+        LoggerError(req.logger_id, er);
+        return res.status(400).send({ msg: "Ocorreu um erro ao buscar clientes" });
+    }
 }
 
 async function register(req = request, res = response) {
@@ -19,15 +25,17 @@ async function register(req = request, res = response) {
         NotExisteError(document, "Documento não informado");
         ValidarCPF(document, "Documento invalido")
 
+        ExisteError((await DBClient.findOne({ where: { document } })).toJSON(), "Cliente ja cadastrado para esse CPF");
+
         try {
             const cli = await DBClient.create({ name, document, phone, address, district, city, state, num_address, cep, isinactive });
             return res.status(201).json(cli);
         } catch (db) {
-            console.error(db);
+            LoggerError(req.logger_id, db);
             throw "Erro ao salvar novo cliente!"
         }
     } catch (e) {
-        console.error(e);
+        LoggerError(req.logger_id, e);
         return res.status(400).send({ msg: e });
     }
 }
@@ -44,7 +52,7 @@ async function edit(req = request, res = response) {
         try {
             prod = await DBProduct.findByPk(id);
         } catch (dbe) {
-            console.error(dbe);
+            LoggerError(req.logger_id, dbe);
             throw "Produto não encontrado!"
         }
 
@@ -52,16 +60,16 @@ async function edit(req = request, res = response) {
 
         const alter = {};
 
-        if (ValidadarSeExiste(name)) {
+        if (Exist(name)) {
             alter.name = name
         }
-        if (ValidadarSeExiste(description)) {
+        if (Exist(description)) {
             alter.description = description
         }
-        if (ValidadarSeExiste(barcode)) {
+        if (Exist(barcode)) {
             alter.barcode = barcode
         }
-        if (ValidadarSeExiste(medida)) {
+        if (Exist(medida)) {
             const option = (await DBOption.findOne({
                 where: { id: medida },
                 include: [{
@@ -77,7 +85,7 @@ async function edit(req = request, res = response) {
 
             alter.medida = medida
         }
-        if (ValidadarSeExiste(price)) {
+        if (Exist(price)) {
             alter.price = price
         }
 
@@ -86,16 +94,17 @@ async function edit(req = request, res = response) {
         }
 
         try {
-            if (ValidadarSeExiste(alter)) {
+            if (Exist(alter)) {
                 await DBProduct.update(alter, { where: { id } });
             }
 
             return res.send();
         } catch (db) {
-            console.error(db);
+            LoggerError(req.logger_id, db);
             throw "Erro ao salvar produto!"
         }
     } catch (e) {
+        LoggerError(req.logger_id, e);
         return res.status(400).send({ msg: e });
     }
 }

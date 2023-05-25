@@ -10,10 +10,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import sequelize from "#SEQUELIZE";
+import Logger from "#MIDDLEWARE/Logger.js";
 
 (async () => {
+   console.log(new Date().toString())
 
-   console.log(new Date().toString() + "\n")
    console.log("Ambiente: " + process.env.NODE_ENV + "\n")
 
    sequelize.createConnection();
@@ -21,7 +22,7 @@ import sequelize from "#SEQUELIZE";
    var app = express();
 
    app.use(bodyParser.json());
-   
+
    app.use(cors());
 
    app.use(function (req, res, next) {
@@ -31,8 +32,9 @@ import sequelize from "#SEQUELIZE";
       res.setHeader('Access-Control-Allow-Credentials', true);
       next();
    });
-
    app.disable('x-powered-by')
+
+   app.use(Logger);
 
    app.use(routes);
 

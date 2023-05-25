@@ -13,7 +13,8 @@ class DBPermission extends Model {
         type: DataTypes.STRING(45)
       },
       path: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true
       }
     }, { sequelize, modelName: 'permission' })
   }

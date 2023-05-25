@@ -1,7 +1,9 @@
-import { ValidadarSeExiste } from "#VALIDADORES";
+import { Exist } from "#VALIDADORES";
 import Jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { DBUser } from "#MODELS/DBUser.js";
+import { LoggerError, LoggerInfo } from "#MIDDLEWARE/Logger.js";
+
 
 export default async (req, res) => {
    try {
@@ -12,10 +14,11 @@ export default async (req, res) => {
       const user = await DBUser.findOne({
          where: {
             login: usuario,
+            isinactive: false
          }
       });
 
-      if (!ValidadarSeExiste(user)) {
+      if (!Exist(user)) {
          throw "Usuario ou senha invalido";
       }
 
@@ -24,13 +27,14 @@ export default async (req, res) => {
       if (match) {
          const token = Jwt.sign({ userUUID: user.uuid, userName: user.name },
             process.env.JWT_SECRET_KEY, { expiresIn: "8h", algorithm: 'HS256' });
-
+         LoggerInfo(req.logger_id, `Usuário ${usuario} autenticado com sucesso`)
          return res.send({ token });
       } else {
          throw "Usuario ou senha invalido";
       }
 
    } catch (err) {
+      LoggerError(req.logger_id, err);
       return res.status(400).send({ msg: err });
    }
 }

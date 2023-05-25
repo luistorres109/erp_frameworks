@@ -24,7 +24,7 @@ function createConnection() {
          port: port,
          dialect: dialect,
          timezone: "America/Sao_Paulo",
-         logging: process.env.NODE_ENV !== 'development' ? false : console.log,
+         logging: process.env.NODE_ENV !== 'development' ? false : false,// console.log,
          pool: {
             max: 50,
             min: 0,
@@ -45,7 +45,7 @@ function createConnection() {
    (async () => {
 
       if (process.env.NODE_ENV == 'development') {
-         await sequelize.sync({ force: false, alter: true });
+         await sequelize.sync({ force: false });
          databaseInit.insertDev(sequelize);
       } else {
          await sequelize.sync({ alter: true });
@@ -55,7 +55,5 @@ function createConnection() {
 
    return sequelize;
 }
-
-
 
 export default { createConnection };

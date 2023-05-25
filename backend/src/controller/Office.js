@@ -1,15 +1,21 @@
+import { LoggerError } from "#MIDDLEWARE/Logger.js";
 import { DBOffice } from "#MODELS/DBOffice.js";
-import { NotExisteError, ValidadarSeExiste } from "#VALIDADORES";
+import { NotExisteError, Exist } from "#VALIDADORES";
 import { request, response } from "express";
 
 
 async function query(req = request, res = response) {
-    const offic = await DBOffice.findAll({
-        where: {
-            isinactive: false
-        }
-    });
-    return res.status(200).send(offic);
+    try {
+        const offic = await DBOffice.findAll({
+            where: {
+                isinactive: false
+            }
+        });
+        return res.send(offic);
+    } catch (e) {
+        LoggerError(req.logger_id, e)
+        return res.status(400).send({ msg: "Erro ao buscar todos os cargos" })
+    }
 }
 
 async function register(req = request, res = response) {
@@ -22,10 +28,11 @@ async function register(req = request, res = response) {
             const offic = await DBOffice.create({ name, isinactive });
             return res.status(201).send(offic);
         } catch (db) {
-            console.error(db);
+            LoggerError(req.logger_id, db)
             throw "Erro ao salvar novo cargo!"
         }
     } catch (e) {
+        LoggerError(req.logger_id, e)
         return res.status(400).send({ msg: e });
     }
 }
@@ -49,7 +56,7 @@ async function edit(req = request, res = response) {
 
         const alter = {};
 
-        if (ValidadarSeExiste(name)) {
+        if (Exist(name)) {
             alter.name = name
         }
 
@@ -59,16 +66,17 @@ async function edit(req = request, res = response) {
 
 
         try {
-            if (ValidadarSeExiste(alter)) {
+            if (Exist(alter)) {
                 await DBOffice.update(alter, { where: { id } });
             }
 
             return res.send();
         } catch (db) {
-            console.error(db);
+            LoggerError(req.logger_id, db)
             throw "Erro ao salvar novo cargo!"
         }
     } catch (e) {
+        LoggerError(req.logger_id, e)
         return res.status(400).send({ msg: e });
     }
 }

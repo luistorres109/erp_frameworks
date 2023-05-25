@@ -1,7 +1,8 @@
+import { LoggerError } from "#MIDDLEWARE/Logger.js";
 import { DBOption } from "#MODELS/DBOption.js";
 import { DBOptionLocation } from "#MODELS/DBOptionLocation.js";
 import { DBProduct } from "#MODELS/DBProduct.js";
-import { NotExisteError, ValidadarSeExiste } from "#VALIDADORES";
+import { NotExisteError, Exist } from "#VALIDADORES";
 import { request, response } from "express";
 
 
@@ -17,7 +18,7 @@ async function query(req = request, res = response) {
             }
         ]
     });
-    return res.status(200).json(prod);
+    return res.send(prod);
 }
 
 async function register(req = request, res = response) {
@@ -58,11 +59,11 @@ async function register(req = request, res = response) {
             return res.status(201).send(prod);
 
         } catch (db) {
-            console.error(db);
+            LoggerError(req.logger_id, db)
             throw "Erro ao salvar novo produto!"
         }
     } catch (e) {
-        console.error(e);
+        LoggerError(req.logger_id, e)
         return res.status(400).send({ msg: e });
     }
 }
@@ -87,16 +88,16 @@ async function edit(req = request, res = response) {
 
         const alter = {};
 
-        if (ValidadarSeExiste(name)) {
+        if (Exist(name)) {
             alter.name = name
         }
-        if (ValidadarSeExiste(description)) {
+        if (Exist(description)) {
             alter.description = description
         }
-        if (ValidadarSeExiste(barcode)) {
+        if (Exist(barcode)) {
             alter.barcode = barcode
         }
-        if (ValidadarSeExiste(medida)) {
+        if (Exist(medida)) {
             const option = (await DBOption.findOne({
                 where: { id: medida },
                 include: [{
@@ -112,7 +113,7 @@ async function edit(req = request, res = response) {
 
             alter.medida = medida
         }
-        if (ValidadarSeExiste(price)) {
+        if (Exist(price)) {
             alter.price = price
         }
 
@@ -121,16 +122,17 @@ async function edit(req = request, res = response) {
         }
 
         try {
-            if (ValidadarSeExiste(alter)) {
+            if (Exist(alter)) {
                 await DBProduct.update(alter, { where: { id } });
             }
 
             return res.send();
         } catch (db) {
-            console.error(db);
+            LoggerError(req.logger_id, db);
             throw "Erro ao salvar produto!"
         }
     } catch (e) {
+        LoggerError(req.logger_id, e);
         return res.status(400).send({ msg: e });
     }
 }

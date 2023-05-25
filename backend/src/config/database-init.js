@@ -1,5 +1,7 @@
 import { DBCep } from "#MODELS/DBCep.js";
 import { DBClient } from "#MODELS/DBClient.js";
+import { DBLogger } from "#MODELS/DBLogger.js";
+import { DBLoggerItem } from "#MODELS/DBLoggerItem.js";
 import { DBOffice } from "#MODELS/DBOffice.js";
 import { DBOfficePermissions } from "#MODELS/DBOfficePermission.js";
 import { DBOption } from "#MODELS/DBOption.js";
@@ -25,8 +27,9 @@ function init(sequelize) {
    DBOrderItem.init(sequelize);
    DBOfficePermissions.init(sequelize);
    DBOptionLocation.init(sequelize);
-   console.log(DBOptionLocation.name)
    DBCep.init(sequelize);
+   DBLogger.init(sequelize);
+   DBLoggerItem.init(sequelize);
 
    // Cria as ASSOCIAÇÕES das tabelas, OBS: A ordem da associação é muito importante!
    const { models } = sequelize;
@@ -43,23 +46,53 @@ function init(sequelize) {
    DBOfficePermissions.associate(models);
    DBOptionLocation.associate(models);
    DBCep.associate(models);
+   DBLogger.associate(models);
+   DBLoggerItem.associate(models);
 
 }
 
 // Função para criar primeiros registro de teste em ambiente de desenvolvimento
 async function insertDev() {
+   if (await DBPermission.count() == 0) {
+      await DBPermission.findOrCreate({ where: { path: "/api/user", name: "Usuário" } });
+      await DBPermission.findOrCreate({ where: { path: "/api/office", name: "Cargo" } });
+      await DBPermission.findOrCreate({ where: { path: "/api/permission", name: "Permissões" } });
+      await DBPermission.findOrCreate({ where: { path: "/api/product", name: "Produto" } });
+      await DBPermission.findOrCreate({ where: { path: "/api/client", name: "Cliente" } });
+      await DBPermission.findOrCreate({ where: { path: "/api/cep", name: "Cep" } });
+      await DBPermission.findOrCreate({ where: { path: "/api/order", name: "Venda" } });
+   }
+
    if (await DBOffice.count() == 0) {
       await DBOffice.create({ name: "Admin" });
    }
+
    if (await DBUser.count() == 0) {
       // senha: admin
-      await DBUser.create({
+      const user = (await DBUser.create({
          name: "Admin",
          office_id: 1,
          login: "admin",
          password: "$2b$10$cQ.bOKkBI5GfVkgwLffc.u4LBSeo6Cct.ytPjSGFPZ8ODdNnhzcxu"
-      });
+      })).toJSON();
+
+      const permissions = await DBPermission.findAll({ raw: true });
+
+      permissions.map(perm => {
+         DBUserPermission.create({
+            user_uuid: user.uuid,
+            permission_id: perm.id,
+            query: true,
+            register: true,
+            edit: true,
+            delete: true
+         });
+      })
    }
+
+
+
+
    const option_p = (await DBOptionLocation.findOrCreate({ where: { name: "product" } }))[0];
    await DBOption.findOrCreate({
       where: { value: "Unidade", location_id: option_p.id, },

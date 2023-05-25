@@ -7,16 +7,20 @@ import Office from "#CONTROLLER/Office.js";
 import Permissions from "#CONTROLLER/Permissions.js";
 import Product from "#CONTROLLER/Product.js";
 import Client from "#CONTROLLER/Client.js";
+import Cep from "#CONTROLLER/Cep.js";
 
 const routes = Router();
 
 routes.post("/api/login", Login);
 
+routes.get("/api/login/verify", Auth, (req, res) => res.send());
+
+
 routes.route("/api/user")
     .post(User.register)
     .all(Auth)
     .get(User.query);
-// routes.put("/api/user/:id", Auth, User.edit);
+routes.put("/api/user/:uuid", Auth, User.edit);
 
 routes.route("/api/office")
     .all(Auth)
@@ -40,6 +44,8 @@ routes.route("/api/client")
     .post(Client.register)
     .get(Client.query);
 routes.put("/api/client/:id", Auth, Client.edit);
+
+routes.get("/api/cep/:cep", Auth, Cep);
 
 // routes.route("/api/order")
 //     .all(Auth)

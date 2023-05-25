@@ -36,6 +36,11 @@ class DBUser extends Model {
    }
 
    static associate(models) {
+      models.office.hasMany(this, {
+         foreignKey: {
+            name: 'office_id',
+         }
+      })
       this.belongsTo(models.office, {
          foreignKey: {
             name: 'office_id',

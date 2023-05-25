@@ -6,10 +6,12 @@ class DBOfficePermissions extends Model {
     super.init({
       office_id: {
         type: DataTypes.INTEGER,
+        primaryKey: true,
         allowNull: false,
       },
       permission_id: {
         type: DataTypes.INTEGER,
+        primaryKey: true,
         allowNull: false,
       },
       query: {
