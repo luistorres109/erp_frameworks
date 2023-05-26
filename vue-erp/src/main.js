@@ -7,7 +7,10 @@ import router from './router'
 
 import { createPinia } from 'pinia'
 
-
-createApp(App).use(createPinia()).use(updateGlobalOptions({ theme: 'colored' })).use(router).mount('#app');
+createApp(App)
+   .use(createPinia())
+   .use(updateGlobalOptions({ theme: 'colored' }))
+   .use(router)
+   .mount('#app');
 
 import "bootstrap/dist/js/bootstrap.js"

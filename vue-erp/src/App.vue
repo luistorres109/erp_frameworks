@@ -1,4 +1,5 @@
 <template>
+  <NavBar v-show="auth.isAuthenticated" />
   <RouterView />
 </template>
 
@@ -6,6 +7,7 @@
 import { RouterView } from 'vue-router';
 import { useAuth } from '@/stores/auth.js'
 import { useRouter } from 'vue-router';
+import NavBar from './components/NavBar.vue';
 
 const auth = useAuth();
 const router = useRouter();

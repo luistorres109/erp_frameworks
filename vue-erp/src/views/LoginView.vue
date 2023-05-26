@@ -1,50 +1,27 @@
 <template>
-  <div class="container">
+  <div class="container container-sm" id="login">
     <div class="card mt-4 card-margin">
       <div class="card-body">
         <h2 class="text-center">ERP LOGIN</h2>
-        <form class="m-3">
+        <form class="m-3" @submit.prevent="login">
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Login</label>
-            <input type="email" class="form-control" id="exampleInputEmail1">
+            <input v-model="user.login" type="text" class="form-control" id="exampleInputEmail1" :disabled="isLoading">
           </div>
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Senha</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
+            <input v-model="user.password" type="password" class="form-control" id="exampleInputPassword1"
+              :disabled="isLoading">
           </div>
-          <div class="mb-3 form-check">
+          <!-- <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="exampleCheck1">
             <label class="form-check-label" for="exampleCheck1">Lembre-se de mim</label>
-          </div>
+          </div> -->
           <button type="submit" class="btn btn-primary">Logar</button>
         </form>
       </div>
     </div>
   </div>
-
-  <!-- <main id="container">
-    <div id="paper">
-      <div id="titulo-container">
-        <h2>ERP</h2>
-        <h2>LOGIN</h2>
-      </div>
-      <div id="form-login">
-        <form @submit.prevent="login">
-          <div class="form-floating mb-3">
-            <input v-model="user.login" type="text" class="form-control" id="login" :disabled="isLoading">
-            <label for="login">Login</label>
-          </div>
-          <div class="form-floating">
-            <input v-model="user.password" type="password" class="form-control" id="senha" :disabled="isLoading">
-            <label for="senha">Password</label>
-          </div>
-          <button type="submit" class="btn btn-primary mt-2" :disabled="isLoading">
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
-  </main> -->
 </template>
 
 <script setup>
@@ -80,12 +57,26 @@ async function login() {
 }
 </script>
 
-<style>
+<style scoped>
 
-.card-margin {
-  margin: 0 300px;
+@media (min-width: 768px) {
+  #login {
+    width: 50vw;
+  }
+}
+@media (min-width: 1024px) {
+  #login {
+    width: 40vw;
+  }
+}
+@media (min-width: 1200px) {
+  #login {
+    width: 30vw;
+  }
 }
 
+
+/*
 #container {
   background-color: lightgray;
   width: 100vw;
@@ -123,5 +114,5 @@ async function login() {
 #form-login form {
   display: flex;
   flex-direction: column;
-}
+} */
 </style>

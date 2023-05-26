@@ -18,11 +18,8 @@ export const useAuth = defineStore('auth', () => {
   async function checkToken() {
     try {
       const tokenAuth = 'Bearer ' + token.value;
-      const { data } = await http.get("/login/verify", {
-        headers: {
-          Authorization: tokenAuth,
-        },
-      });
+      http.defaults.headers.Authorization = tokenAuth;
+      const { data } = await http.get("/login/verify");
       return true;
     } catch (error) {
       return false;

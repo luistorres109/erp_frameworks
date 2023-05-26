@@ -98,10 +98,10 @@ async function insertDev() {
       where: { value: "Unidade", location_id: option_p.id, },
    });
    await DBOption.findOrCreate({
-      where: { value: "Kilo", location_id: option_p.id },
+      where: { value: "Kg", location_id: option_p.id },
    });
    await DBOption.findOrCreate({
-      where: { value: "Grama", location_id: option_p.id },
+      where: { value: "g", location_id: option_p.id },
    });
 
    // await DBOptionLocation.findOrCreate({
