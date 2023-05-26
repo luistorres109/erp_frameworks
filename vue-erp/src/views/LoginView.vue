@@ -1,5 +1,28 @@
 <template>
-  <main id="container">
+  <div class="container">
+    <div class="card mt-4 card-margin">
+      <div class="card-body">
+        <h2 class="text-center">ERP LOGIN</h2>
+        <form class="m-3">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Login</label>
+            <input type="email" class="form-control" id="exampleInputEmail1">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="exampleInputPassword1">
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Lembre-se de mim</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Logar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- <main id="container">
     <div id="paper">
       <div id="titulo-container">
         <h2>ERP</h2>
@@ -20,9 +43,8 @@
           </button>
         </form>
       </div>
-
     </div>
-  </main>
+  </main> -->
 </template>
 
 <script setup>
@@ -59,6 +81,11 @@ async function login() {
 </script>
 
 <style>
+
+.card-margin {
+  margin: 0 300px;
+}
+
 #container {
   background-color: lightgray;
   width: 100vw;
